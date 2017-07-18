@@ -120,26 +120,30 @@
                     });
                 });
 
-                // hide container on ENTER
-                $document.on('keydown', function (event) {
+                function onDocumentKeyDown(event) {
                     var $event = event;
                     scope.$evalAsync(function () {
                         _documentKeyDown($event);
                     });
-                });
+                }
 
-                angular.element($window).on('resize', function () {
+                // hide container on ENTER
+                $document.on('keydown', onDocumentKeyDown);
+
+                function onWindowResize() {
                     scope.$evalAsync(function () {
                         ctrl.hide();
                     });
-                });
+                }
+                angular.element($window).on('resize', onWindowResize);
 
-                $document.on('click', function (event) {
+                function onDocumentClick(event) {
                     var $event = event;
                     scope.$evalAsync(function () {
                         _documentClick($event);
                     });
-                });
+                }
+                $document.on('click', onDocumentClick);
 
                 function _ignoreKeyCode(keyCode) {
                     return [
@@ -265,6 +269,12 @@
             // cleanup on destroy
             var destroyFn = scope.$on('$destroy', function () {
                 if (ctrl.container) {
+
+                    // cleanup bindings
+                    $document.off('keydown', onDocumentKeyDown);
+                    $document.off('click', onDocumentClick);
+                    angular.element($window).off('resize', onWindowResize);
+
                     ctrl.container.remove();
                     ctrl.container = null;
                 }
