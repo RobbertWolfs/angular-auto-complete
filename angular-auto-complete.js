@@ -96,6 +96,26 @@
                 return html;
             }
 
+            function onDocumentKeyDown(event) {
+                var $event = event;
+                scope.$evalAsync(function () {
+                    _documentKeyDown($event);
+                });
+            }
+            
+            function onWindowResize() {
+                scope.$evalAsync(function () {
+                    ctrl.hide();
+                });
+            }
+
+            function onDocumentClick(event) {
+                var $event = event;
+                scope.$evalAsync(function () {
+                    _documentClick($event);
+                });
+            }
+
             function _wireupEvents() {
 
                 // when the target(textbox) gets focus activate the corresponding container
@@ -120,29 +140,11 @@
                     });
                 });
 
-                function onDocumentKeyDown(event) {
-                    var $event = event;
-                    scope.$evalAsync(function () {
-                        _documentKeyDown($event);
-                    });
-                }
-
                 // hide container on ENTER
                 $document.on('keydown', onDocumentKeyDown);
 
-                function onWindowResize() {
-                    scope.$evalAsync(function () {
-                        ctrl.hide();
-                    });
-                }
                 angular.element($window).on('resize', onWindowResize);
 
-                function onDocumentClick(event) {
-                    var $event = event;
-                    scope.$evalAsync(function () {
-                        _documentClick($event);
-                    });
-                }
                 $document.on('click', onDocumentClick);
 
                 function _ignoreKeyCode(keyCode) {
