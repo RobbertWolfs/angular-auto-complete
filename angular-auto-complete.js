@@ -277,6 +277,8 @@
                     $document.off('click', onDocumentClick);
                     angular.element($window).off('resize', onWindowResize);
 
+                    internalService.removeDirectiveCtrl(ctrl);
+
                     ctrl.container.remove();
                     ctrl.container = null;
                 }
@@ -613,6 +615,15 @@
                 pluginCtrls.push(ctrl);
             }
         };
+
+        this.removeDirectiveCtrl = function (ctrl) {
+            if (ctrl) {
+                var index = pluginCtrls.indexOf(ctrl);
+                if (index > -1) {
+                    pluginCtrls.splice(index, 1);
+                }
+            }
+        }
 
         this.getNewInstanceId = function () {
             return instanceCount++;
